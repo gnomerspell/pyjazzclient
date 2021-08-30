@@ -1,0 +1,10 @@
+build/lib/pyjazzclient/__init__.py
+build/lib/pyjazzclient/exceptions.py
+build/lib/pyjazzclient/jazzartifact.py
+build/lib/pyjazzclient/jazzclient.py
+build/lib/pyjazzclient/testcase.py
+pyjazzclient.egg-info/dependency_links.txt
+pyjazzclient.egg-info/PKG-INFO
+pyjazzclient.egg-info/requires.txt
+pyjazzclient.egg-info/SOURCES.txt
+pyjazzclient.egg-info/top_level.txt

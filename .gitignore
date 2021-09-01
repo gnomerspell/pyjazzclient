@@ -8,3 +8,11 @@ pyjazzclient.egg-info/PKG-INFO
 pyjazzclient.egg-info/requires.txt
 pyjazzclient.egg-info/SOURCES.txt
 pyjazzclient.egg-info/top_level.txt
+pyjazzclient/__pycache__/__init__.cpython-39.pyc
+pyjazzclient/__pycache__/exceptions.cpython-39.pyc
+pyjazzclient/__pycache__/jazzartifact.cpython-39.pyc
+pyjazzclient/__pycache__/jazzclient.cpython-39.pyc
+pyjazzclient/__pycache__/testcase.cpython-39.pyc
+pyjazzclient/__pycache__/testscript.cpython-39.pyc
+dist/pyjazzclient-0.0.1-py3-none-any.whl
+dist/pyjazzclient-0.0.1.tar.gz

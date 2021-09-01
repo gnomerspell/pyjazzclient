@@ -46,6 +46,14 @@ class Constants():
     SCRIPT_STEP_COUNT = "ns2:scriptStepCount"
     TEMPLATE_PATH = "ns2:template"
     COMPONENT_PATH = "ns2:component"
+    TESTCASE_DESIGN_PATH = "ns2:com.ibm.rqm.planning.editor.section.testCaseDesign"
+    TESTCASE_PRECONDITION_PATH = "ns2:com.ibm.rqm.planning.editor.section.testCasePreCondition"
+    TESTCASE_POSTCONDITION_PATH = "ns2:com.ibm.rqm.planning.editor.section.testCasePostCondition"
+    TESTSCRIPTS_PATH = "ns2:testscript"
+    TESTCASE_EXECUTION_RECORDS_PATH = ""
+    VARIABLES_PATH = "ns2:variables/ns2:variable"
+    ATTACHMENTS = "ns2:attachment"
+    TESTCASE_EXPECTED_RESULTS = "ns2:com.ibm.rqm.planning.editor.section.testCaseExpectedResults"
 
 
 class TestCase(JazzArtifact):
@@ -140,13 +148,15 @@ class TestCase(JazzArtifact):
             Constants.STATE_PATH,
             "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource", Constants.NAMESPACES)
 
+    # TODO - Create setter for state
+
     @property
     def creator(self):
         return self.get_attributes_from_element_path(
             Constants.CREATOR_PATH,
             ["name", "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource"], Constants.NAMESPACES)
 
-    #TODO: Work
+    # TODO: Work
     # @property
     # def owner(self):
     #     pass
@@ -159,7 +169,9 @@ class TestCase(JazzArtifact):
     def weight(self):
         return self.get_text_from_element_path(Constants.WEIGHT_PATH, Constants.NAMESPACES)
 
-    #TODO: Work
+    # TODO - Create setter for weight
+
+    # TODO: Work
     # @property
     # def priority(self):
     #     pass
@@ -168,11 +180,13 @@ class TestCase(JazzArtifact):
     def suspect(self):
         return self.get_text_from_element_path(Constants.SUSPECT_PATH, Constants.NAMESPACES)
 
+    # TODO - Create setter for suspect
+
     @property
     def testcase_execution_record_count(self):
         return self.get_text_from_element_path(Constants.TESTCASE_EXECUTION_RECORD_COUNT, Constants.NAMESPACES)
 
-    #TODO: Work
+    # TODO: Work
     # @property
     # def variables(self):
     #     pass
@@ -185,6 +199,141 @@ class TestCase(JazzArtifact):
     def template(self):
         return self.get_attribute_from_element_path(Constants.TEMPLATE_PATH, "href", Constants.NAMESPACES)
 
+    # TODO - Create setter for template
+
     @property
     def component(self):
         return self.get_attribute_from_element_path(Constants.COMPONENT_PATH, "href", Constants.NAMESPACES)
+
+    @property
+    def testcase_design(self):
+        result = None
+
+        element = self.xml.find(
+            Constants.TESTCASE_DESIGN_PATH, Constants.NAMESPACES)
+
+        if (element is not None):
+            children_elements = list(element)
+            text = None if len(children_elements) <= 0 else ET.tostring(
+                children_elements[0])
+            result = {"display_name": element.attrib["extensionDisplayName"],
+                      "text": text}
+
+        return result
+
+    # TODO - Create setter for testcase_design
+
+    @property
+    def testcase_precondition(self):
+        result = None
+
+        element = self.xml.find(
+            Constants.TESTCASE_PRECONDITION_PATH, Constants.NAMESPACES)
+
+        if (element is not None):
+            children_elements = list(element)
+            text = None if len(children_elements) <= 0 else ET.tostring(
+                children_elements[0])
+            result = {"display_name": element.attrib["extensionDisplayName"],
+                      "text": text}
+
+        return result
+
+    # TODO - Create setter for testcase_precondition
+
+    @property
+    def testcase_postcondition(self):
+        result = None
+
+        element = self.xml.find(
+            Constants.TESTCASE_POSTCONDITION_PATH, Constants.NAMESPACES)
+
+        if (element is not None):
+            children_elements = list(element)
+            text = None if len(children_elements) <= 0 else ET.tostring(
+                children_elements[0])
+            result = {"display_name": element.attrib["extensionDisplayName"],
+                      "text": text}
+
+        return result
+
+    # TODO - Create setter for testcase_postcondition
+
+    @property
+    def testscripts(self):
+        testscripts = []
+
+        testscript_elements = self.xml.findall(
+            Constants.TESTSCRIPTS_PATH, Constants.NAMESPACES)
+
+        for testscript_element in testscript_elements:
+            testscripts.append(testscript_element.attrib["href"])
+
+        return testscripts
+
+    # TODO - Create add/remove testscripts method
+
+    # TODO - Determine how to get data
+    @property
+    def testcase_execution_records(self):
+        testcase_execution_records = []
+
+        testcase_execution_records_elements = self.xml.findall(
+            Constants.TESTCASE_EXECUTION_RECORDS_PATH, Constants.NAMESPACES)
+
+        for testscript_element in testscript_elements:
+            testscripts.append(testscript_element.attrib["href"])
+
+        return testscripts
+
+    @property
+    def variables(self):
+        variables = []
+
+        variables_elements = self.xml.findall(
+            Constants.VARIABLES_PATH, Constants.NAMESPACES)
+
+        for variables_element in variables_elements:
+            name = variables_element.find(
+                "ns2:name", Constants.NAMESPACES).text
+            value = variables_element.find(
+                "ns2:value", Constants.NAMESPACES).text
+            variables.append({"name": name, "value": value})
+
+        return variables
+
+    # TODO - Create get for architecture element links
+
+    # TODO - Create get for associated electronic signatures
+
+    @property
+    def attachments(self):
+        attachments = []
+
+        attachment_elements = self.xml.findall(
+            Constants.ATTACHMENTS, Constants.NAMESPACES)
+
+        for attachment_element in attachment_elements:
+            attachments.append(attachment_element.attrib["href"])
+
+        return attachments
+
+    # TODO - Create method to add/remove attachments
+
+    @property
+    def testcase_expected_results(self):
+        result = None
+
+        element = self.xml.find(
+            Constants.TESTCASE_EXPECTED_RESULTS, Constants.NAMESPACES)
+
+        if (element is not None):
+            children_elements = list(element)
+            text = None if len(children_elements) <= 0 else ET.tostring(
+                children_elements[0])
+            result = {"display_name": element.attrib["extensionDisplayName"],
+                      "text": text}
+
+        return result
+
+    # TODO - Create setter for testcase_expected_results

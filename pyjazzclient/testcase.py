@@ -67,32 +67,12 @@ class TestCase(JazzArtifact):
         super(TestCase, self).__init__(xml)
         # pass
         if (xml is None):
-            empty_testcase_xml = """<?xml version="1.0" encoding="UTF-8"?>
-                                    <ns2:testcase xmlns:ns2="http://jazz.net/xmlns/alm/qm/v0.1/"
-                                        xmlns:ns1="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                                        xmlns:ns3="http://schema.ibm.com/vega/2008/"
-                                        xmlns:ns4="http://purl.org/dc/elements/1.1/"
-                                        xmlns:ns5="http://jazz.net/xmlns/prod/jazz/process/0.6/"
-                                        xmlns:ns6="http://jazz.net/xmlns/alm/v0.1/"
-                                        xmlns:ns7="http://purl.org/dc/terms/"
-                                        xmlns:ns8="http://jazz.net/xmlns/alm/qm/v0.1/testscript/v0.1/"
-                                        xmlns:ns9="http://jazz.net/xmlns/alm/qm/v0.1/executionworkitem/v0.1"
-                                        xmlns:ns10="http://open-services.net/ns/core#"
-                                        xmlns:ns11="http://open-services.net/ns/qm#"
-                                        xmlns:ns12="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
-                                        xmlns:ns13="http://www.w3.org/2002/07/owl#"
-                                        xmlns:ns14="http://jazz.net/xmlns/alm/qm/qmadapter/v0.1"
-                                        xmlns:ns15="http://jazz.net/xmlns/alm/qm/qmadapter/task/v0.1"
-                                        xmlns:ns16="http://jazz.net/xmlns/alm/qm/v0.1/executionresult/v0.1"
-                                        xmlns:ns17="http://jazz.net/xmlns/alm/qm/v0.1/catalog/v0.1"
-                                        xmlns:ns18="http://jazz.net/xmlns/alm/qm/v0.1/tsl/v0.1/"
-                                        xmlns:ns20="http://jazz.net/xmlns/alm/qm/styleinfo/v0.1/"
-                                        xmlns:ns21="http://www.w3.org/1999/XSL/Transform">
-                                    </ns2:testcase>"""
-            self.xml = ET.fromstring(empty_testcase_xml)
+            namespaces = [f'xmlns:{prefix}="{uri}"' for prefix,
+                          uri in TestcaseConstants.NAMESPACES.items()]
+            empty_testcase_xml = '<?xml version="1.0" encoding="UTF-8"?><ns2:testcase {}></ns2:testcase>'.format(
+                " ".join(namespaces))
 
-        # for prefix, uri in Constants.NAMESPACES.items():
-        #     ET.register_namespace(prefix, uri)
+            self.xml = ET.fromstring(empty_testcase_xml)
 
     @property
     def project_area(self):

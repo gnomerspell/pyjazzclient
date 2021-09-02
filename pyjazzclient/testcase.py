@@ -170,7 +170,8 @@ class TestCase(JazzArtifact):
 
     @property
     def testcase_execution_record_count(self):
-        return self.get_text_from_element_path(TestcaseConstants.TESTCASE_EXECUTION_RECORD_COUNT, TestcaseConstants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.TESTCASE_EXECUTION_RECORD_COUNT,
+                                               TestcaseConstants.NAMESPACES)
 
     # TODO: Work
     # @property
@@ -183,13 +184,15 @@ class TestCase(JazzArtifact):
 
     @property
     def template(self):
-        return self.get_attribute_from_element_path(TestcaseConstants.TEMPLATE_PATH, "href", TestcaseConstants.NAMESPACES)
+        return self.get_attribute_from_element_path(TestcaseConstants.TEMPLATE_PATH, "href",
+                                                    TestcaseConstants.NAMESPACES)
 
     # TODO - Create setter for template
 
     @property
     def component(self):
-        return self.get_attribute_from_element_path(TestcaseConstants.COMPONENT_PATH, "href", TestcaseConstants.NAMESPACES)
+        return self.get_attribute_from_element_path(TestcaseConstants.COMPONENT_PATH, "href",
+                                                    TestcaseConstants.NAMESPACES)
 
     @property
     def testcase_design(self):
@@ -267,10 +270,11 @@ class TestCase(JazzArtifact):
         testcase_execution_records_elements = self.xml.findall(
             TestcaseConstants.TESTCASE_EXECUTION_RECORDS_PATH, TestcaseConstants.NAMESPACES)
 
-        for testscript_element in testscript_elements:
-            testscripts.append(testscript_element.attrib["href"])
+        for testcase_execution_records_element in testcase_execution_records_elements:
+            testcase_execution_records.append(
+                testcase_execution_records_element.attrib["href"])
 
-        return testscripts
+        return testcase_execution_records
 
     @property
     def variables(self):

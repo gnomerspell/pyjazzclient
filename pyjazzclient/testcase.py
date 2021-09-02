@@ -4,7 +4,12 @@ import xml.etree.ElementTree as ET
 from .jazzartifact import JazzArtifact
 
 
-class Constants():
+class TestcaseConstants():
+    TESTCASE_URL = ("/service/com.ibm.rqm.integration.service.IIntegrationService/"
+                    "resources/{project}/testcase/")
+
+    TESTCASE_URN = "urn:com.ibm.rqm:testcase:{web_id}"
+
     NAMESPACES = {
         "ns1": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         "ns2": "http://jazz.net/xmlns/alm/qm/v0.1/",
@@ -91,70 +96,71 @@ class TestCase(JazzArtifact):
 
     @property
     def project_area(self):
-        return self.get_attribute_from_element_path(Constants.PROJECT_AREA_PATH, "href", Constants.NAMESPACES)
+        return self.get_attribute_from_element_path(TestcaseConstants.PROJECT_AREA_PATH, "href", TestcaseConstants.NAMESPACES)
 
     @property
     def identifier(self):
-        return self.get_text_from_element_path(Constants.IDENTIFIER_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.IDENTIFIER_PATH, TestcaseConstants.NAMESPACES)
 
     @property
     def stylesheet(self):
-        return self.get_attribute_from_element_path(Constants.STYLESHEET_PATH, "href", Constants.NAMESPACES)
+        return self.get_attribute_from_element_path(TestcaseConstants.STYLESHEET_PATH, "href", TestcaseConstants.NAMESPACES)
 
     @property
     def web_id(self):
-        return self.get_text_from_element_path(Constants.WEB_ID_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.WEB_ID_PATH, TestcaseConstants.NAMESPACES)
 
     @property
     def title(self):
-        return self.get_text_from_element_path(Constants.TITLE_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.TITLE_PATH, TestcaseConstants.NAMESPACES)
 
     @ title.setter
     def title(self, value):
-        element = self.xml.find(Constants.TITLE_PATH, Constants.NAMESPACES)
+        element = self.xml.find(
+            TestcaseConstants.TITLE_PATH, TestcaseConstants.NAMESPACES)
         if (element is None):
             tag = "{" + \
-                Constants.NAMESPACES["ns4"] + "}title"
+                TestcaseConstants.NAMESPACES["ns4"] + "}title"
             element = ET.SubElement(
                 self.xml, tag)
         element.text = str(value)
 
     @property
     def description(self):
-        return self.get_text_from_element_path(Constants.DESCRIPTION_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.DESCRIPTION_PATH, TestcaseConstants.NAMESPACES)
 
     @ description.setter
     def description(self, value):
         element = self.xml.find(
-            Constants.DESCRIPTION_PATH, Constants.NAMESPACES)
+            TestcaseConstants.DESCRIPTION_PATH, TestcaseConstants.NAMESPACES)
         if (element is None):
             tag = "{" + \
-                Constants.NAMESPACES["ns4"] + "}description"
+                TestcaseConstants.NAMESPACES["ns4"] + "}description"
             element = ET.SubElement(
                 self.xml, tag)
         element.text = str(value)
 
     @property
     def creation_date(self):
-        return self.get_text_from_element_path(Constants.CREATION_DATE_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.CREATION_DATE_PATH, TestcaseConstants.NAMESPACES)
 
     @property
     def updated(self):
-        return self.get_text_from_element_path(Constants.UPDATED_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.UPDATED_PATH, TestcaseConstants.NAMESPACES)
 
     @property
     def state(self):
         return self.get_attribute_from_element_path(
-            Constants.STATE_PATH,
-            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource", Constants.NAMESPACES)
+            TestcaseConstants.STATE_PATH,
+            "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource", TestcaseConstants.NAMESPACES)
 
     # TODO - Create setter for state
 
     @property
     def creator(self):
         return self.get_attributes_from_element_path(
-            Constants.CREATOR_PATH,
-            ["name", "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource"], Constants.NAMESPACES)
+            TestcaseConstants.CREATOR_PATH,
+            ["name", "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource"], TestcaseConstants.NAMESPACES)
 
     # TODO: Work
     # @property
@@ -163,11 +169,11 @@ class TestCase(JazzArtifact):
 
     @property
     def locked(self):
-        return self.get_text_from_element_path(Constants.LOCKED_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.LOCKED_PATH, TestcaseConstants.NAMESPACES)
 
     @property
     def weight(self):
-        return self.get_text_from_element_path(Constants.WEIGHT_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.WEIGHT_PATH, TestcaseConstants.NAMESPACES)
 
     # TODO - Create setter for weight
 
@@ -178,13 +184,13 @@ class TestCase(JazzArtifact):
 
     @property
     def suspect(self):
-        return self.get_text_from_element_path(Constants.SUSPECT_PATH, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.SUSPECT_PATH, TestcaseConstants.NAMESPACES)
 
     # TODO - Create setter for suspect
 
     @property
     def testcase_execution_record_count(self):
-        return self.get_text_from_element_path(Constants.TESTCASE_EXECUTION_RECORD_COUNT, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.TESTCASE_EXECUTION_RECORD_COUNT, TestcaseConstants.NAMESPACES)
 
     # TODO: Work
     # @property
@@ -193,24 +199,24 @@ class TestCase(JazzArtifact):
 
     @property
     def script_step_count(self):
-        return self.get_text_from_element_path(Constants.SCRIPT_STEP_COUNT, Constants.NAMESPACES)
+        return self.get_text_from_element_path(TestcaseConstants.SCRIPT_STEP_COUNT, TestcaseConstants.NAMESPACES)
 
     @property
     def template(self):
-        return self.get_attribute_from_element_path(Constants.TEMPLATE_PATH, "href", Constants.NAMESPACES)
+        return self.get_attribute_from_element_path(TestcaseConstants.TEMPLATE_PATH, "href", TestcaseConstants.NAMESPACES)
 
     # TODO - Create setter for template
 
     @property
     def component(self):
-        return self.get_attribute_from_element_path(Constants.COMPONENT_PATH, "href", Constants.NAMESPACES)
+        return self.get_attribute_from_element_path(TestcaseConstants.COMPONENT_PATH, "href", TestcaseConstants.NAMESPACES)
 
     @property
     def testcase_design(self):
         result = None
 
         element = self.xml.find(
-            Constants.TESTCASE_DESIGN_PATH, Constants.NAMESPACES)
+            TestcaseConstants.TESTCASE_DESIGN_PATH, TestcaseConstants.NAMESPACES)
 
         if (element is not None):
             children_elements = list(element)
@@ -228,7 +234,7 @@ class TestCase(JazzArtifact):
         result = None
 
         element = self.xml.find(
-            Constants.TESTCASE_PRECONDITION_PATH, Constants.NAMESPACES)
+            TestcaseConstants.TESTCASE_PRECONDITION_PATH, TestcaseConstants.NAMESPACES)
 
         if (element is not None):
             children_elements = list(element)
@@ -246,7 +252,7 @@ class TestCase(JazzArtifact):
         result = None
 
         element = self.xml.find(
-            Constants.TESTCASE_POSTCONDITION_PATH, Constants.NAMESPACES)
+            TestcaseConstants.TESTCASE_POSTCONDITION_PATH, TestcaseConstants.NAMESPACES)
 
         if (element is not None):
             children_elements = list(element)
@@ -264,7 +270,7 @@ class TestCase(JazzArtifact):
         testscripts = []
 
         testscript_elements = self.xml.findall(
-            Constants.TESTSCRIPTS_PATH, Constants.NAMESPACES)
+            TestcaseConstants.TESTSCRIPTS_PATH, TestcaseConstants.NAMESPACES)
 
         for testscript_element in testscript_elements:
             testscripts.append(testscript_element.attrib["href"])
@@ -279,7 +285,7 @@ class TestCase(JazzArtifact):
         testcase_execution_records = []
 
         testcase_execution_records_elements = self.xml.findall(
-            Constants.TESTCASE_EXECUTION_RECORDS_PATH, Constants.NAMESPACES)
+            TestcaseConstants.TESTCASE_EXECUTION_RECORDS_PATH, TestcaseConstants.NAMESPACES)
 
         for testscript_element in testscript_elements:
             testscripts.append(testscript_element.attrib["href"])
@@ -291,13 +297,13 @@ class TestCase(JazzArtifact):
         variables = []
 
         variables_elements = self.xml.findall(
-            Constants.VARIABLES_PATH, Constants.NAMESPACES)
+            TestcaseConstants.VARIABLES_PATH, TestcaseConstants.NAMESPACES)
 
         for variables_element in variables_elements:
             name = variables_element.find(
-                "ns2:name", Constants.NAMESPACES).text
+                "ns2:name", TestcaseConstants.NAMESPACES).text
             value = variables_element.find(
-                "ns2:value", Constants.NAMESPACES).text
+                "ns2:value", TestcaseConstants.NAMESPACES).text
             variables.append({"name": name, "value": value})
 
         return variables
@@ -311,7 +317,7 @@ class TestCase(JazzArtifact):
         attachments = []
 
         attachment_elements = self.xml.findall(
-            Constants.ATTACHMENTS, Constants.NAMESPACES)
+            TestcaseConstants.ATTACHMENTS, TestcaseConstants.NAMESPACES)
 
         for attachment_element in attachment_elements:
             attachments.append(attachment_element.attrib["href"])
@@ -325,7 +331,7 @@ class TestCase(JazzArtifact):
         result = None
 
         element = self.xml.find(
-            Constants.TESTCASE_EXPECTED_RESULTS, Constants.NAMESPACES)
+            TestcaseConstants.TESTCASE_EXPECTED_RESULTS, TestcaseConstants.NAMESPACES)
 
         if (element is not None):
             children_elements = list(element)

@@ -1,7 +1,7 @@
 import requests
 import xml.etree.ElementTree as ET
 
-from .testcase import TestCase
+from .testcase import TestCase, TestcaseConstants
 from .exceptions import JazzClientRequestError
 
 
@@ -11,9 +11,6 @@ class JazzClient():
         "Accept": "application/xml",
         "Content-Type": "application/rdf+xml"
     }
-
-    TESTCASE_URL = ("/service/com.ibm.rqm.integration.service.IIntegrationService/"
-                    "resources/{project}/testcase")
 
     WEB_ID_OR_SLUG_REQUIRED = "web_id or slug must be provided"
     TESTCASE_MUST_BE_VALID = "testcase must be a valid TestCase"
@@ -36,14 +33,16 @@ class JazzClient():
             # response.raise_for_status()
             if (response.status_code not in [200, 201]):
                 raise JazzClientRequestError(None, response)
+
+            print(response.text)
         except Exception as err:
             raise err
 
         return response
 
-    def testcase(self, web_id: str = None, slug: str = None, revision: int = None, calm_links: bool = None,
-                 oslc_links: bool = None, meta_data: bool = None, abbreviate: bool = None,
-                 sort: str = None, fields: str = None, project: dict = None) -> TestCase:
+    def get_testcase(self, web_id: str = None, slug: str = None, revision: int = None, calm_links: bool = None,
+                     oslc_links: bool = None, meta_data: bool = None, abbreviate: bool = None,
+                     sort: str = None, fields: str = None, project: dict = None) -> TestCase:
         """
         """
         # ensure we have either a web_id or a slug
@@ -55,13 +54,13 @@ class JazzClient():
 
         # create url string
         url = self.__server_url + \
-            JazzClient.TESTCASE_URL.format(project=project)
+            TestcaseConstants.TESTCASE_URL.format(project=project)
 
         # append web_id or slug to url
         if (web_id is not None):
-            url += f"/urn:com.ibm.rqm:testcase:{web_id}"
+            url += TestcaseConstants.TESTCASE_URN.format(web_id=web_id)
         if (slug is not None):
-            url += f"/{slug}"
+            url += slug
 
         # attempt to make GET request for testcase
         try:
@@ -97,7 +96,7 @@ class JazzClient():
 
         # create url string
         url = self.__server_url + \
-            JazzClient.TESTCASE_URL.format(project=project)
+            TestcaseConstants.TESTCASE_URL.format(project=project)
 
         try:
             response = self.__request(method="POST", url=url, data=testcase.to_string(),
@@ -117,13 +116,13 @@ class JazzClient():
 
         # create url string
         url = self.__server_url + \
-            JazzClient.TESTCASE_URL.format(project=project)
+            TestcaseConstants.TESTCASE_URL.format(project=project)
 
         # append web_id or slug to url
         if (web_id is not None):
-            url += f"/urn:com.ibm.rqm:testcase:{web_id}"
+            url += TestcaseConstants.TESTCASE_URN.format(web_id=web_id)
         if (slug is not None):
-            url += f"/{slug}"
+            url += slug
 
         # attempt to make GET request for testcase
         try:
@@ -142,13 +141,13 @@ class JazzClient():
 
         # create url string
         url = self.__server_url + \
-            JazzClient.TESTCASE_URL.format(project=project)
+            TestcaseConstants.TESTCASE_URL.format(project=project)
 
         # append web_id or slug to url
         if (web_id is not None):
-            url += f"/urn:com.ibm.rqm:testcase:{web_id}"
+            url += TestcaseConstants.TESTCASE_URN.format(web_id=web_id)
         if (slug is not None):
-            url += f"/{slug}"
+            url += slug
 
         # attempt to make GET request for testcase
         try:
@@ -167,13 +166,13 @@ class JazzClient():
 
         # create url string
         url = self.__server_url + \
-            JazzClient.TESTCASE_URL.format(project=project)
+            TestcaseConstants.TESTCASE_URL.format(project=project)
 
         # append web_id or slug to url
         if (web_id is not None):
-            url += f"/urn:com.ibm.rqm:testcase:{web_id}"
+            url += TestcaseConstants.TESTCASE_URN.format(web_id=web_id)
         if (slug is not None):
-            url += f"/{slug}"
+            url += slug
 
         # attempt to make GET request for testcase
         try:
@@ -190,7 +189,7 @@ class JazzClient():
 
         # create url string
         url = self.__server_url + \
-            JazzClient.TESTCASE_URL.format(project=project)
+            TestcaseConstants.TESTCASE_URL.format(project=project)
 
         # attempt to make GET request for testcase
         try:

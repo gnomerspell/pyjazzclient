@@ -30,3 +30,9 @@ class JazzArtifact():
 
     def to_string(self) -> str:
         return ET.tostring(self.xml).decode("utf-8")
+
+    def create_subelement(self, parent: ET.Element, tag: str, attrib: dict = {},
+                          text: str = None, **extra) -> ET.Element:
+        result = ET.SubElement(parent, tag, attrib, **extra)
+        result.text = text
+        return result

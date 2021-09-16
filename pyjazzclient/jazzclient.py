@@ -2,6 +2,7 @@ import requests
 import xml.etree.ElementTree as ET
 
 from .testcase import TestCase, TestcaseConstants
+from .testscript import TestScript, TestscriptConstants
 from .exceptions import JazzClientRequestError
 
 
@@ -14,6 +15,7 @@ class JazzClient():
 
     WEB_ID_OR_SLUG_REQUIRED = "web_id or slug must be provided"
     TESTCASE_MUST_BE_VALID = "testcase must be a valid TestCase"
+    TESTSCRIPT_MUST_BE_VALID = "testscript must be a valid TestScript"
 
     def __init__(self, server_url: str, username: str, password: str, default_projects: dict = None):
         """Constructor"""
@@ -124,7 +126,7 @@ class JazzClient():
         if (slug is not None):
             url += slug
 
-        # attempt to make GET request for testcase
+        # attempt to make DELETE request for testcase
         try:
             response = self.__request(method="DELETE", url=url,
                                       headers=JazzClient.RQM_REQUEST_HEADER, auth=(self.__username, self.__password))
@@ -194,6 +196,97 @@ class JazzClient():
         # attempt to make GET request for testcase
         try:
             _ = self.__request(method="GET", url=url,
+                                      headers=JazzClient.RQM_REQUEST_HEADER, auth=(self.__username, self.__password))
+        except requests.exceptions.HTTPError:
+            raise
+
+    def get_testscript(self, web_id: str = None, slug: str = None, revision: int = None, calm_links: bool = None,
+                       oslc_links: bool = None, meta_data: bool = None, abbreviate: bool = None,
+                       sort: str = None, fields: str = None, project: dict = None) -> TestScript:
+        """
+        """
+        # ensure we have either a web_id or a slug
+        if (web_id is None and slug is None):
+            raise ValueError(JazzClient.WEB_ID_OR_SLUG_REQUIRED)
+
+        # use the provided project, if one is not provided use default_projects qm
+        project = project or self.__default_projects["qm"]
+
+        # create url string
+        url = self.__server_url + \
+            TestscriptConstants.TESTSCRIPT_URL.format(project=project)
+
+        # append web_id or slug to url
+        if (web_id is not None):
+            url += TestscriptConstants.TESTSCRIPT_URN.format(web_id=web_id)
+        if (slug is not None):
+            url += slug
+
+        # attempt to make GET request
+        try:
+            response = self.__request(method="GET", url=url,
+                                      headers=JazzClient.RQM_REQUEST_HEADER, auth=(self.__username, self.__password))
+        except Exception as err:
+            raise err
+
+        # convert response payload to xml element
+        xml = ET.fromstring(response.text)
+
+        # create a model object containing the results of our request
+        testscript = TestScript(xml)
+
+        # return model to caller
+        return testscript
+
+    def update_testscript(self, testscript: TestScript) -> None:
+        if (isinstance(testscript, TestScript) == False):
+            raise ValueError(JazzClient.TESTSCRIPT_MUST_BE_VALID)
+
+        try:
+            response = self.__session.put(url=testscript.identifier, data=testscript.to_string(),
+                                          headers=JazzClient.RQM_REQUEST_HEADER, allow_redirects=True,
+                                          auth=(self.__username, self.__password))
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            raise err
+
+    def create_testscript(self, testscript: TestScript, project: str = None) -> str:
+        # use the provided project, if one is not provided use default_projects qm
+        project = project or self.__default_projects["qm"]
+
+        # create url string
+        url = self.__server_url + \
+            TestscriptConstants.TESTSCRIPT_URL.format(project=project)
+
+        try:
+            response = self.__request(method="POST", url=url, data=testscript.to_string(),
+                                      headers=JazzClient.RQM_REQUEST_HEADER, auth=(self.__username, self.__password))
+        except requests.exceptions.HTTPError:
+            raise
+
+        return response.headers.get("Content-Location")
+
+    def delete_testscript(self, web_id: int = None, slug: str = None, project: str = None) -> None:
+        # ensure we have either a web_id or a slug
+        if (web_id is None and slug is None):
+            raise ValueError(JazzClient.WEB_ID_OR_SLUG_REQUIRED)
+
+        # use the provided project, if one is not provided use default_projects qm
+        project = project or self.__default_projects["qm"]
+
+        # create url string
+        url = self.__server_url + \
+            TestscriptConstants.TESTSCRIPT_URL.format(project=project)
+
+        # append web_id or slug to url
+        if (web_id is not None):
+            url += TestscriptConstants.TESTSCRIPT_URN.format(web_id=web_id)
+        if (slug is not None):
+            url += slug
+
+        # attempt to DELETE artifact
+        try:
+            response = self.__request(method="DELETE", url=url,
                                       headers=JazzClient.RQM_REQUEST_HEADER, auth=(self.__username, self.__password))
         except requests.exceptions.HTTPError:
             raise

@@ -2,7 +2,6 @@
 
 ```python
 >>> from pyjazzclient.jazzclient import JazzClient
->>> from pyjazzclient.get_testcase import TestCase
 >>> server_url = "https://jazz.net/jazz"
 >>> default_projects = {"qm": "__JVJ8e2eEeuHyM9xpDtK0B", "rm": "__JVJ8e2eEeuHyM9xpDtK0C"}
 >>> jazz = JazzClient(server_url, "username", "password", default_projects)
